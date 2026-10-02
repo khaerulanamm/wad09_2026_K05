@@ -13,10 +13,21 @@ def get_next_id():
 def create_session(session_in: SessionIn):
     # Validasi Pydantic sudah tertangani otomatis oleh SessionIn
     new_session = session_in.model_dump()
-    new_session["id"] = get_next_id()
     # Konversi dt.date menjadi string ISO agar konsisten
     new_session["date"] = new_session["date"].isoformat()
-    
+
+    for session in SESSIONS:
+        if (
+            session["instructor"] == new_session["instructor"]
+            and session["date"] == new_session["date"]
+            and session["start_time"] == new_session["start_time"]
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Instruktur sudah mengajar kelas lain pada tanggal dan jam yang sama",
+            )
+
+    new_session["id"] = get_next_id()
     SESSIONS.append(new_session)
     return new_session
 
