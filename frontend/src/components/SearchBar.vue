@@ -1,33 +1,14 @@
-<template>
-  <form class="search-form" @submit.prevent="submitSearch">
-    <label for="session-search">Cari kelas atau instruktur</label>
+<script setup>
+const search = defineModel({ type: String, default: '' })
+const emit = defineEmits(['search'])
+</script>
 
-    <div class="search-row">
-      <input
-        id="session-search"
-        v-model="query"
-        type="search"
-        placeholder="Contoh: Yoga atau Rina"
-      />
+<template>
+  <form class="search" role="search" @submit.prevent="emit('search')">
+    <label for="search-input">Cari kelas atau instruktur</label>
+    <div class="row">
+      <input id="search-input" v-model="search" type="search" maxlength="50" placeholder="mis. yoga" />
       <button type="submit">Cari</button>
     </div>
   </form>
 </template>
-
-<script setup>
-import { ref } from "vue"
-
-const props = defineProps({
-  initialValue: {
-    type: String,
-    default: "",
-  },
-})
-
-const emit = defineEmits(["search"])
-const query = ref(props.initialValue)
-
-function submitSearch() {
-  emit("search", query.value)
-}
-</script>

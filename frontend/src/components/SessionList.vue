@@ -1,56 +1,55 @@
+<script setup>
+import { computed } from 'vue'
+import { PAGE_SIZE, useSessions } from '../composables/useSessions.js'
+import PagerNav from './PagerNav.vue'
+import SearchBar from './SearchBar.vue'
+import SessionCard from './SessionCard.vue'
+
+const { status, items, total, error, page, search, load } = useSessions()
+const pageCount = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
+const keyword = computed(() => search.value.trim())
+
+function onSearch() {
+  page.value = 0
+  load()
+}
+
+function goTo(newPage) {
+  page.value = newPage
+  load()
+}
+
+// Dipanggil App.vue setelah sesi ditambah atau dihapus.
+defineExpose({ reload: load })
+</script>
+
 <template>
-  <section class="session-list" aria-labelledby="session-list-title">
-    <div class="section-heading">
-      <h2 id="session-list-title">Daftar Kelas</h2>
-      <span>{{ total }} sesi</span>
-    </div>
+  <section class="panel" aria-labelledby="list-title">
+    <h2 id="list-title">Jadwal kelas</h2>
+    <SearchBar v-model="search" @search="onSearch" />
 
-    <div v-if="loading" class="state-message" role="status">
-      Memuat jadwal kelas...
-    </div>
+    <p v-if="status === 'loading'" class="notice" role="status">Memuat jadwal…</p>
 
-    <div v-else-if="error" class="state-message state-error" role="alert">
+    <div v-else-if="status === 'error'" class="notice notice-error" role="alert">
       <p>{{ error }}</p>
-      <button type="button" @click="$emit('retry')">
-        Coba Lagi
-      </button>
+      <button type="button" @click="load">Coba lagi</button>
     </div>
 
-    <div v-else-if="sessions.length === 0" class="state-message">
-      Tidak ada kelas yang ditemukan.
-    </div>
+    <p v-else-if="status === 'empty'" class="notice" role="status">
+      <template v-if="keyword">Tidak ada kelas yang cocok dengan "{{ keyword }}".</template>
+      <template v-else>Belum ada jadwal kelas. Tambahkan lewat form.</template>
+    </p>
 
-    <div v-else class="session-grid">
-      <SessionCard
-        v-for="session in sessions"
-        :key="session.id"
-        :session="session"
-      />
-    </div>
+    <template v-else>
+      <p class="muted">{{ total }} kelas ditemukan</p>
+      <ul class="session-list">
+        <li v-for="session in items" :key="session.id">
+          <SessionCard :session="session">
+            <slot name="actions" :session="session" />
+          </SessionCard>
+        </li>
+      </ul>
+      <PagerNav :page="page" :page-count="pageCount" @change="goTo" />
+    </template>
   </section>
 </template>
-
-<script setup>
-import SessionCard from "./SessionCard.vue"
-
-defineProps({
-  sessions: {
-    type: Array,
-    required: true,
-  },
-  total: {
-    type: Number,
-    required: true,
-  },
-  loading: {
-    type: Boolean,
-    required: true,
-  },
-  error: {
-    type: String,
-    default: "",
-  },
-})
-
-defineEmits(["retry"])
-</script>

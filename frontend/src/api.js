@@ -1,41 +1,33 @@
-const API_BASE_URL = "http://localhost:8000"
+// Base URL dibaca dari environment, supaya tidak ada localhost yang tertulis mati di build produksi.
+export const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000'
 
-export async function fetchSessions({
-  skip = 0,
-  limit = 10,
-  search = "",
-  signal,
-} = {}) {
-  const params = new URLSearchParams({
-    skip: String(skip),
-    limit: String(limit),
-  })
-
-  if (search.trim()) {
-    params.set("search", search.trim())
+export class ApiError extends Error {
+  constructor(status, detail) {
+    super(typeof detail === 'string' ? detail : `Server menolak permintaan (${status}).`)
+    this.name = 'ApiError'
+    this.status = status
+    this.detail = detail
   }
-
-  const response = await fetch(
-    `${API_BASE_URL}/sessions?${params.toString()}`,
-    { signal }
-  )
-
-  if (!response.ok) {
-    throw new Error(`Gagal mengambil sesi (${response.status})`)
-  }
-
-  return response.json()
 }
 
-export async function fetchSession(id, signal) {
-  const response = await fetch(
-    `${API_BASE_URL}/sessions/${id}`,
-    { signal }
-  )
-
-  if (!response.ok) {
-    throw new Error(`Gagal mengambil sesi (${response.status})`)
+// Satu pintu untuk semua fetch: error jaringan dan status non-2xx selalu jadi ApiError,
+// sehingga pemanggil cukup satu try/catch dan tidak ada promise yang lolos tanpa ditangani.
+export async function request(path, options = {}) {
+  let res
+  try {
+    res = await fetch(`${API_BASE}${path}`, options)
+  } catch (err) {
+    if (err.name === 'AbortError') throw err
+    throw new ApiError(0, 'Server tidak dapat dihubungi. Pastikan backend berjalan.')
   }
+  if (res.status === 204) return null
+  const body = await res.json().catch(() => null)
+  if (!res.ok) throw new ApiError(res.status, body?.detail ?? null)
+  return body
+}
 
-  return response.json()
+export function listSessions({ skip, limit, search }, signal) {
+  const params = new URLSearchParams({ skip, limit })
+  if (search) params.set('search', search)
+  return request(`/sessions?${params}`, { signal })
 }

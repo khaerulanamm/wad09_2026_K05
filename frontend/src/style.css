@@ -1,242 +1,92 @@
 :root {
-  font-family: Inter, system-ui, sans-serif;
-  color: #172033;
-  background: #f4f7fb;
-  line-height: 1.5;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1c1f24;
+  --muted: #5b626d;
+  --border: #d4d8de;
+  --accent: #0b6e4f;
+  --danger: #b42318;
+  --danger-bg: #fdecea;
+  --focus: #1d4ed8;
+  color-scheme: light;
+  font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
 }
 
-* {
-  box-sizing: border-box;
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 0.5rem; }
+
+.site-header { background: var(--accent); color: #fff; padding: 1.25rem 1rem; }
+.site-header p { margin: 0; }
+
+.layout {
+  display: grid;
+  /* minmax(0, …): kolom tidak ikut melebar mengikuti isi yang lebar, jadi tidak ada scroll ke samping. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+@media (min-width: 900px) {
+  .layout { grid-template-columns: 340px minmax(0, 1fr); align-items: start; }
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
 }
 
-button,
-input {
-  font: inherit;
+button, input, select { font: inherit; }
+input, select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
 }
-
 button {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
   cursor: pointer;
 }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary { background: #fff; color: var(--accent); }
+.btn-danger { background: var(--danger); border-color: var(--danger); }
 
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
+/* Q2: fokus keyboard selalu terlihat. */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
-button:focus-visible,
-input:focus-visible {
-  outline: 3px solid #7c9cff;
-  outline-offset: 2px;
-}
+.row { display: flex; gap: 0.5rem; }
+.search { margin-bottom: 1rem; }
+.search label, .field label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
 
-.app-header {
-  padding: 56px 20px 48px;
-  background: #172554;
-  color: white;
-}
+.field { margin-bottom: 0.75rem; }
+.field-error { color: var(--danger); margin: 0.25rem 0 0; font-size: 0.9rem; }
+input[aria-invalid='true'], select[aria-invalid='true'] { border-color: var(--danger); }
 
-.container {
-  width: min(1100px, calc(100% - 40px));
-  margin: 0 auto;
-}
+.notice { padding: 0.75rem; border-radius: 6px; background: var(--bg); }
+.notice p { margin: 0 0 0.5rem; }
+.notice-error { background: var(--danger-bg); color: var(--danger); }
+.notice-success { background: #e7f5ee; color: var(--accent); }
+.muted { color: var(--muted); margin: 0 0 0.5rem; }
 
-.eyebrow {
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  opacity: 0.7;
-}
+.session-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.card { border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; }
+.card dl { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.75rem; margin: 0 0 0.75rem; }
+.card dt { color: var(--muted); }
+.card dd { margin: 0; }
 
-h1,
-h2,
-p {
-  margin-top: 0;
-}
-
-h1 {
-  margin-bottom: 10px;
-  font-size: clamp(32px, 5vw, 48px);
-}
-
-.subtitle {
-  max-width: 620px;
-  margin-bottom: 0;
-  opacity: 0.8;
-}
-
-main {
-  padding: 32px 0 60px;
-}
-
-.search-section,
-.session-list {
-  margin-bottom: 28px;
-  padding: 24px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-}
-
-.search-section h2,
-.section-heading h2 {
-  margin-bottom: 16px;
-}
-
-.search-form label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.search-row {
-  display: flex;
-  gap: 10px;
-}
-
-.search-row input {
-  flex: 1;
-  min-width: 0;
-  padding: 11px 14px;
-  border: 1px solid #cbd5e1;
-  border-radius: 9px;
-}
-
-.search-row button,
-.state-error button,
-.pagination button {
-  padding: 10px 16px;
-  border: 0;
-  border-radius: 9px;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.section-heading span {
-  color: #64748b;
-  font-size: 14px;
-}
-
-.session-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.session-card {
-  padding: 20px;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  background: #f8fafc;
-}
-
-.session-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.session-card h2 {
-  margin-bottom: 8px;
-  font-size: 20px;
-}
-
-.session-level {
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: #dbeafe;
-  color: #1d4ed8;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.session-instructor {
-  color: #475569;
-}
-
-.session-details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 18px 0 0;
-}
-
-.session-details div {
-  padding-top: 10px;
-  border-top: 1px solid #e2e8f0;
-}
-
-.session-details dt {
-  color: #64748b;
-  font-size: 12px;
-}
-
-.session-details dd {
-  margin: 2px 0 0;
-  font-weight: 600;
-}
-
-.state-message {
-  padding: 36px 20px;
-  text-align: center;
-  color: #64748b;
-}
-
-.state-error {
-  color: #b91c1c;
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-}
-
-.pagination span {
-  color: #475569;
-  font-size: 14px;
-}
-
-@media (max-width: 800px) {
-  .session-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 560px) {
-  .container {
-    width: min(100% - 24px, 1100px);
-  }
-
-  .app-header {
-    padding: 40px 12px;
-  }
-
-  .search-row {
-    flex-direction: column;
-  }
-
-  .session-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .pagination {
-    gap: 8px;
-  }
+.delete .row { flex-wrap: wrap; align-items: center; }
+.pager { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+/* Layar sempit: teks "Halaman x dari y" naik ke baris sendiri, tombol di bawahnya. */
+@media (max-width: 480px) {
+  .pager { flex-wrap: wrap; }
+  .pager span { order: -1; flex-basis: 100%; text-align: center; }
 }
