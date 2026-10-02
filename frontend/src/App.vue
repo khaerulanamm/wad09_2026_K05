@@ -1,7 +1,13 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import SessionList from './components/SessionList.vue'
 </script>
 
 <template>
-  <HelloWorld />
+  <header class="site-header">
+    <h1>Jadwal Kelas Gym</h1>
+    <p>Catat dan kelola jadwal kelas fitness.</p>
+  </header>
+  <main class="layout">
+    <SessionList />
+  </main>
 </template>
