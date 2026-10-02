@@ -25,6 +25,7 @@
         v-for="session in sessions"
         :key="session.id"
         :session="session"
+        @deleted="$emit('deleted')"
       />
     </div>
   </section>
@@ -52,5 +53,5 @@ defineProps({
   },
 })
 
-defineEmits(["retry"])
+defineEmits(["retry", "deleted"])
 </script>

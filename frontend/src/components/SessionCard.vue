@@ -30,14 +30,20 @@
         <dd>{{ session.capacity }} peserta</dd>
       </div>
     </dl>
+
+    <DeleteButton :session="session" @deleted="$emit('deleted')" />
   </article>
 </template>
 
 <script setup>
+import DeleteButton from './DeleteButton.vue'
+
 defineProps({
   session: {
     type: Object,
     required: true,
   },
 })
+
+defineEmits(['deleted'])
 </script>

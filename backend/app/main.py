@@ -33,3 +33,6 @@ def read_item(item_id: int, q: str | None = None):
 
 # Bagian A: daftar dan detail sesi (B1, B2)
 app.include_router(session_read_router)
+
+# Bagian B: create & delete sesi (B3, B4)
+app.include_router(session_router)

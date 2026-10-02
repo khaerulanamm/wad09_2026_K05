@@ -11,6 +11,8 @@
     </header>
 
     <main class="container">
+      <SessionForm @created="retry" />
+
       <section class="search-section" aria-labelledby="search-title">
         <h2 id="search-title">Cari Kelas</h2>
         <SearchBar
@@ -25,6 +27,7 @@
         :loading="loading"
         :error="error"
         @retry="retry"
+        @deleted="retry"
       />
 
       <Pagination
@@ -42,6 +45,7 @@
 <script setup>
 import SearchBar from "./components/SearchBar.vue"
 import SessionList from "./components/SessionList.vue"
+import SessionForm from "./components/SessionForm.vue"
 import Pagination from "./components/Pagination.vue"
 import { useSessions } from "./composables/useSessions"
 
