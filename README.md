@@ -121,6 +121,11 @@ Verifikasi manual yang juga dinilai:
 - `http://localhost:8000/health` — balas `200` dengan `{"status":"ok"}`
 - `http://localhost:8000/docs` — OpenAPI terbuka
 
+### Verifikasi UTS (Bagian B)
+- **B3 (Skema & Validasi):** POST `/sessions` dengan data tak valid (misal `capacity: 0`). Pastikan ditolak dengan `422`.
+- **B4 (Create & Delete):** POST `/sessions` dengan data valid (dapat `201`), lalu catat ID barunya. Lakukan DELETE ke ID tersebut (dapat `204`). Ulangi DELETE ID yang sama (dapat `404`).
+- **B5 (CORS):** Buka console di browser Frontend (`http://localhost:5173`), pastikan tidak ada error CORS saat memanggil API.
+
 ## 5. Masalah yang sering muncul
 
 | Gejala | Sebab biasanya | Tindakan |
