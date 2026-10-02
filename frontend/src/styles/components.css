@@ -1,0 +1,158 @@
+.search-section,
+.session-list {
+  margin-bottom: 28px;
+  padding: 24px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.search-section h2,
+.section-heading h2 {
+  margin-bottom: 16px;
+}
+
+.search-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+.search-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+}
+
+.search-row button,
+.state-error button,
+.pagination button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-heading span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.session-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.session-card {
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.session-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.session-card h2 {
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.session-level {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.session-instructor {
+  color: #475569;
+}
+
+.session-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0 0;
+}
+
+.session-details div {
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.session-details dt {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.session-details dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+
+.state-message {
+  padding: 36px 20px;
+  text-align: center;
+  color: #64748b;
+}
+
+.state-error {
+  color: #b91c1c;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.pagination span {
+  color: #475569;
+  font-size: 14px;
+}
+
+@media (max-width: 800px) {
+  .session-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .search-row {
+    flex-direction: column;
+  }
+
+  .session-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    gap: 8px;
+  }
+}

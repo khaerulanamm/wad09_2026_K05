@@ -1,24 +1,61 @@
-<script setup>
-import { ref } from 'vue'
-import DeleteButton from './components/DeleteButton.vue'
-import SessionForm from './components/SessionForm.vue'
-import SessionList from './components/SessionList.vue'
-
-const list = ref(null)
-const reload = () => list.value?.reload()
-</script>
-
 <template>
-  <header class="site-header">
-    <h1>Jadwal Kelas Gym</h1>
-    <p>Catat dan kelola jadwal kelas fitness.</p>
-  </header>
-  <main class="layout">
-    <SessionForm @created="reload" />
-    <SessionList ref="list">
-      <template #actions="{ session }">
-        <DeleteButton :session="session" @deleted="reload" />
-      </template>
-    </SessionList>
-  </main>
+  <div class="app">
+    <header class="app-header">
+      <div class="container">
+        <p class="eyebrow">FITNESS CENTER</p>
+        <h1>Jadwal Kelas Gym</h1>
+        <p class="subtitle">
+          Temukan jadwal kelas dan instruktur yang sesuai dengan kebutuhanmu.
+        </p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="search-section" aria-labelledby="search-title">
+        <h2 id="search-title">Cari Kelas</h2>
+        <SearchBar
+          :initial-value="search"
+          @search="setSearch"
+        />
+      </section>
+
+      <SessionList
+        :sessions="sessions"
+        :total="total"
+        :loading="loading"
+        :error="error"
+        @retry="retry"
+      />
+
+      <Pagination
+        :skip="skip"
+        :limit="limit"
+        :total="total"
+        :loading="loading"
+        @previous="previousPage"
+        @next="nextPage"
+      />
+    </main>
+  </div>
 </template>
+
+<script setup>
+import SearchBar from "./components/SearchBar.vue"
+import SessionList from "./components/SessionList.vue"
+import Pagination from "./components/Pagination.vue"
+import { useSessions } from "./composables/useSessions"
+
+const {
+  sessions,
+  total,
+  skip,
+  limit,
+  search,
+  loading,
+  error,
+  retry,
+  setSearch,
+  nextPage,
+  previousPage,
+} = useSessions()
+</script>
