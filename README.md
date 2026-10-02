@@ -59,7 +59,7 @@ lewat branch `feature/*` dan pull request.
 | Alat | Versi | Cek |
 |---|---|---|
 | Git | apa saja | `git --version` |
-| Node.js | 20 LTS atau lebih baru | `node -v` |
+| Node.js | **20.19+** atau **22.12+** (syarat Vite 8) | `node -v` |
 | Python | 3.11 atau lebih baru | `python --version` |
 | Akun GitHub | — | sudah jadi anggota repo ini |
 
@@ -99,6 +99,13 @@ npm install
 npm run dev
 ```
 
+- Backend: `http://localhost:8000` (dokumentasi interaktif di `/docs`)
+- Frontend: `http://localhost:5173`
+- Data disimpan di memori (`backend/app/data.py`, 12 jadwal kelas fiktif). Restart backend
+  mengembalikan data ke kondisi awal.
+- CORS hanya mengizinkan `http://localhost:5173`. Buka frontend lewat alamat itu, bukan
+  `127.0.0.1:5173`.
+
 ## 4. Cara memverifikasi
 
 Satu perintah, dipakai sepanjang semester:
@@ -121,6 +128,35 @@ Verifikasi manual yang juga dinilai:
 - `http://localhost:8000/health` — balas `200` dengan `{"status":"ok"}`
 - `http://localhost:8000/docs` — OpenAPI terbuka
 
+### Verifikasi cepat requirement Sesi 8
+
+Backend diuji lewat `http://localhost:8000/docs` (**Try it out**). Frontend diuji di
+`http://localhost:5173`.
+
+| # | Cara memverifikasi | Hasil yang diharapkan |
+|---|---|---|
+| B1 | `GET /sessions?skip=0&limit=5`, lalu `skip=5`; `search=yoga`; `search=zzz` | `items` berisi 5, `total` 12; hasil yoga dari nama kelas atau instruktur; `search=zzz` memberi `items: []` |
+| B2 | `GET /sessions/3`, lalu `GET /sessions/999` | `200` berisi sesi; `404` `{"detail": "Session not found"}` |
+| B3 | `POST /sessions` dengan contoh body di `/docs`; lalu kirim `capacity: 0` atau `level: "pro"` | `201` dengan `id` baru; `422` bila tidak valid; `409` bila instruktur sudah mengajar pada tanggal dan jam yang sama |
+| B4 | `DELETE /sessions/{id}` untuk id yang ada, lalu ulangi | `204` tanpa body; kedua kalinya `404` |
+| B5 | Buka frontend di `localhost:5173` (berhasil), lalu jalankan `fetch('http://localhost:8000/sessions')` dari console tab situs lain | Dari `localhost:5173` berhasil; dari origin lain diblokir CORS |
+| F1 | Muat ulang halaman | Daftar muncul dari API; tab Network menunjukkan `GET /sessions`. Permintaan dibatalkan (`AbortController`) saat komponen dilepas. |
+| F2 | Matikan backend lalu muat ulang; nyalakan lagi lalu klik **Coba lagi**; cari `zzz` | Tampil "Memuat…", lalu pesan error dan tombol **Coba lagi** yang memuat ulang daftar; pencarian `zzz` menampilkan state kosong |
+| F3 | Klik **Simpan** dengan form kosong; isi form dengan instruktur, tanggal, dan jam yang sama dengan kelas yang ada | Pesan error di bawah tiap input; error `409` dari server tampil di atas tombol **Simpan** |
+| F4 | Klik **Hapus**, lalu **Batal**; ulangi dan klik **Ya, hapus** | Batal tidak menghapus apa pun; **Ya, hapus** menghapus dan daftar langsung diperbarui |
+| Q1–Q3 | Telusuri halaman hanya dengan Tab, Shift+Tab, dan Enter; buka console | Semua kontrol dapat dijangkau dengan garis fokus biru; console tanpa error, termasuk saat backend mati (kecuali log jaringan bawaan browser) |
+
+## Pembagian requirement Sesi 8
+
+| Bagian | Requirement | Anggota |
+|---|---|---|
+| A | B1, B2 (+ dataset `data.py`) | _isi nama_ |
+| B | B3, B4, B5 | _isi nama_ |
+| C | F1, F2 | _isi nama_ |
+| D | F3, F4 | _isi nama_ |
+
+Q1–Q5 dikerjakan bersama.
+
 ## 5. Masalah yang sering muncul
 
 | Gejala | Sebab biasanya | Tindakan |
@@ -132,6 +168,8 @@ Verifikasi manual yang juga dinilai:
 | `venv/` ikut ter-commit | `.gitignore` diubah | kembalikan `.gitignore` bawaan repo |
 | Menu **Branches → Add rule** tidak ada | repo dibuat **Private** | Settings → General → Danger Zone → **Change visibility → Public** |
 | Tidak bisa merge PR sendiri | "Require approvals" sudah dinyalakan | matikan dulu malam ini (lihat bagian 0 langkah 4) |
+| `npm run build`/`dev` gagal: `Cannot find native binding` | Node di bawah 20.19 | perbarui Node ke 20.19+ atau 22 LTS, hapus `node_modules/`, lalu `npm install` lagi |
+| Frontend menampilkan "Server tidak dapat dihubungi" | backend belum jalan, atau frontend dibuka lewat `127.0.0.1` | jalankan `uvicorn`, lalu buka `http://localhost:5173` |
 
 ---
 
@@ -201,7 +239,10 @@ nilainya 0.
 - Sesi 5 — GitHub Copilot, autocomplete pada model SQLAlchemy. Ditinjau dan diubah manual.
 -->
 
-- _(belum ada)_
+- Sesi 7 — ChatGPT, untuk menyusun ide pembagian tugas kelompok.
+- Sesi 7 — Claude (Claude Code), untuk merencanakan pembagian requirement dan membuat draf
+  kode backend dan frontend Sesi 8. Tiap anggota meninjau dan mempelajari bagiannya sebelum
+  commit. _(sesuaikan dengan yang sebenarnya terjadi)_
 
 ## Kalau kamu tersendat
 
