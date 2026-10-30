@@ -7,6 +7,9 @@ from app.controllers.session_read_controller import router as session_read_route
 from app.routers.auth import router as auth_router
 from app.routers.users import router as users_router
 
+from app.controllers.class_read_controller import router as class_read_router
+from app.controllers.class_controller import router as class_router
+
 app = FastAPI()
 
 
@@ -43,3 +46,7 @@ app.include_router(session_read_router)
 
 # Bagian B: create & delete sesi (B3, B4)
 app.include_router(session_router)
+
+# Bagian C: daftar/detail & kelola kelas gym
+app.include_router(class_read_router)
+app.include_router(class_router)
