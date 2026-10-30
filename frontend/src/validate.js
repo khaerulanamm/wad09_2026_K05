@@ -20,6 +20,8 @@ export function emptyClass() {
   }
 }
 
+export const emptySession = emptyClass
+
 function inRange(value, min, max) {
   return Number.isInteger(Number(value)) && Number(value) >= min && Number(value) <= max
 }
@@ -39,6 +41,8 @@ export function validateClass(form) {
   if (!LEVELS.some((item) => item.value === form.level)) errors.level = 'Pilih level kelas.'
   return errors
 }
+
+export const validateSession = validateClass
 
 export function serverFieldErrors(err) {
   if (err.status !== 422 || !Array.isArray(err.detail)) return {}
