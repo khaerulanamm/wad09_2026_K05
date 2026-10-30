@@ -1,8 +1,8 @@
 <script setup>
 import { nextTick, ref } from 'vue'
-import { deleteSession } from '../api-write.js'
+import { deleteClass } from '../api/classes.js'
 
-const props = defineProps({ session: { type: Object, required: true } })
+const props = defineProps({ classItem: { type: Object, required: true } })
 const emit = defineEmits(['deleted'])
 
 const confirming = ref(false)
@@ -27,7 +27,7 @@ async function cancel() {
 async function remove() {
   busy.value = true
   try {
-    await deleteSession(props.session.id)
+    await deleteClass(props.classItem.id)
     emit('deleted')
   } catch (err) {
     error.value = err.message
@@ -44,8 +44,8 @@ async function remove() {
     <button v-if="!confirming" ref="askButton" type="button" class="btn-secondary" @click="ask">
       Hapus
     </button>
-    <div v-else class="row" role="group" :aria-label="`Konfirmasi hapus ${session.class_name}`">
-      <span>Hapus kelas "{{ session.class_name }}"?</span>
+    <div v-else class="row" role="group" :aria-label="`Konfirmasi hapus ${classItem.class_name}`">
+      <span>Hapus kelas "{{ classItem.class_name }}"?</span>
       <button ref="confirmButton" type="button" class="btn-danger" :disabled="busy" @click="remove">
         Ya, hapus
       </button>
