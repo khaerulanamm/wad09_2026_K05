@@ -1,4 +1,9 @@
 import os
+import sys
+
+# Pastikan folder `backend/` (induk dari tests/) ada di sys.path agar
+# package `app` dapat diimpor saat pytest dijalankan dari mana pun.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 os.environ.setdefault("JWT_SECRET", "test-only-secret-for-pytest-long-enough-32-bytes")
 
