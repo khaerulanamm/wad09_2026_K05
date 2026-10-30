@@ -4,6 +4,9 @@ from app.controllers.session_controller import router as session_router
 
 from app.controllers.session_read_controller import router as session_read_router
 
+from app.routers.auth import router as auth_router
+from app.routers.users import router as users_router
+
 app = FastAPI()
 
 
@@ -30,6 +33,10 @@ def read_health():
 def read_item(item_id: int, q: str | None = None):
     return {"item_id": item_id, "q": q}
 
+
+# Bagian A: autentikasi JWT dan manajemen akun
+app.include_router(auth_router)
+app.include_router(users_router)
 
 # Bagian A: daftar dan detail sesi (B1, B2)
 app.include_router(session_read_router)
