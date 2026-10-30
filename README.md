@@ -214,3 +214,9 @@ Tersendat di satu sesi tidak menghapus nilai sesi lain — **berhenti total yang
 Kalau `frontend` atau `backend` tim belum jalan, tetap masuk sesi berikutnya, kerjakan yang bisa
 dikerjakan, lalu minta waktu di 10 menit pertama sesi berikutnya. Lapor di thread RISE dengan
 **seluruh pesan error**, bukan ringkasannya.
+
+
+VIDEO CONTOH PENGGUNAAN
+https://drive.google.com/file/d/1nTRJOnJxT15--jsbZwS8sWy8xgahZDzY/view?usp=sharing
+
+URL FRONTEND= https://clckfkaw9hssqngfp5u4gpxs.43.157.235.190.sslip.io
